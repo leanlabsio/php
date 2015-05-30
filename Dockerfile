@@ -4,8 +4,7 @@ EXPOSE 9000
 
 ADD build-extensions.sh /
 
-RUN echo 'http://mirror.yandex.ru/mirrors/alpine/v3.2/main' > /etc/apk/repositories && \
-    apk add --update \
+RUN apk add --update \
         php-fpm \
         php-mcrypt \
         php-json \
