@@ -1,8 +1,4 @@
-apk add alpine-sdk
-apk add php-dev
-apk add autoconf
-apk add cmake
-apk add openssl-dev
+apk add alpine-sdk php-dev autoconf cmake openssl-dev
 
 cd /tmp
 git clone https://github.com/phpredis/phpredis.git
@@ -36,9 +32,6 @@ echo "extension=amqp.so" >> /etc/php/conf.d/amqp.ini
 
 rm -rf /tmp/*
 
-apk del --purge openssl-dev
-apk del --purge cmake
-apk del --purge autoconf
-apk del --purge php-dev
-apk del --purge alpine-sdk
+apk del --purge openssl-dev cmake autoconf php-dev alpine-sdk
 
+rm -rf /var/cache/apk/*

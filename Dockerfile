@@ -1,15 +1,19 @@
-FROM gliderlabs/alpine:latest
+FROM gliderlabs/alpine:3.2
 
-RUN apk update \
-    && apk add php-fpm \
-    && apk add php-mcrypt \
-    && apk add php-json \
-    && apk add php-curl \
-    && apk add php-opcache
+EXPOSE 9000
 
 ADD build-extensions.sh /
 
-RUN sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g' /etc/php/php-fpm.conf && \
-    sed -i 's/listen.allowed_clients = 127.0.0.1/;listen.allowed_clients = 127.0.0.1/g' /etc/php/php-fpm.conf
-
-RUN /bin/sh /build-extensions.sh
+RUN echo 'http://mirror.yandex.ru/mirrors/alpine/v3.2/main' > /etc/apk/repositories && \
+    apk add --update \
+        php-fpm \
+        php-mcrypt \
+        php-json \
+        php-curl \
+        php-opcache && \
+    sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /etc/php/php-fpm.conf && \
+    sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g' /etc/php/php-fpm.conf && \
+    sed -i 's/html_errors = On/html_errors = Off/g' /etc/php/php.ini && \
+    sed -i 's/;php_flag\[display_errors\]/php_flag\[display_errors\]/g' /etc/php/php-fpm.conf && \
+    sed -i 's/listen.allowed_clients = 127.0.0.1/;listen.allowed_clients = 127.0.0.1/g' /etc/php/php-fpm.conf && \
+    /build-extensions.sh
